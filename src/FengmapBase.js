@@ -60,11 +60,22 @@ class FengmapBase extends Component {
     this.mapContainer = React.createRef()
     this.loadingTxt = React.createRef()
 
-    isChildrenValid(props.children)
+    let children = this._removeNullDomArray(props.children || [])
+
+    isChildrenValid(children)
 
     this.refs = null
 
     this.isFengmapBase = props.isFengmapBase === undefined ? true : props.isFengmapBase
+  }
+
+  _removeNullDomArray = (children = null) => {
+    return children.reduce((init, curr) => {
+      if (curr === null) {
+        return init
+      }
+      return init.concat(curr)
+    }, [])
   }
 
   _loadMap = mapId => {
@@ -194,12 +205,14 @@ class FengmapBase extends Component {
       )
     }
 
-    const cloneChildren = cloneElements(children)
+    const childs = this._removeNullDomArray(children || [])
+    const cloneChildren = cloneElements(childs)
     if (cloneChildren) {
       this.refs = cloneChildren.map(c => c.ref)
     }
+
     return (
-      <div style={Object.assign({}, style, { position: 'relative' })} ref={reference}>
+      <div style={Object.assign({}, style, { position: 'relative' })}>
         <div ref={this.mapContainer} style={INNER_STYLE} />
         <div ref={this.loadingTxt} style={INNER_STYLE}>
           {loadingTxt}
@@ -210,7 +223,7 @@ class FengmapBase extends Component {
   }
 }
 
-export default React.forwardRef((props, ref) => <FengmapBase reference={ref} {...props} />)
+export default React.forwardRef((props, ref) => <FengmapBase ref={ref} {...props} />)
 
 function cloneElements(children) {
   if (!children) {
