@@ -60,7 +60,7 @@ class FengmapBase extends Component {
     this.mapContainer = React.createRef()
     this.loadingTxt = React.createRef()
 
-    let children = this._removeNullDomArray(props.children || [])
+    const children = this._removeNullDomArray(props.children || [])
 
     isChildrenValid(children)
 
@@ -189,7 +189,7 @@ class FengmapBase extends Component {
   }
 
   render() {
-    const { style, loadingTxt, children, reference } = this.props
+    const { style, loadingTxt, children } = this.props
 
     if (isOrderIE()) {
       return (
@@ -223,7 +223,7 @@ class FengmapBase extends Component {
   }
 }
 
-export default React.forwardRef((props, ref) => <FengmapBase ref={ref} {...props} />)
+export default FengmapBase
 
 function cloneElements(children) {
   if (!children) {
